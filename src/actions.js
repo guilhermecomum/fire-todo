@@ -1,17 +1,23 @@
-import apiAction from './apiAction'
+import { auth } from './firebase/firebase'
+import {reset} from 'redux-form';
 
-export const getFilms = () => {
-  return apiAction({
-    prefix: 'GET_FILMS',
-    path: '/films/',
-    processResponse: async (response, films) => {
-      return { films }
-    }
-  })
-}
-
-export const chooseFilm = (id) => {
+export const signUp = (email, password) => {
   return dispatch => {
-    dispatch({ type: 'CHOOSE_FILM', id})
+    dispatch({ type: 'SIGN_UP_REQUEST' })
+    auth
+      .createUserWithEmailAndPassword(email, password)
+      .then(authUser => {
+        dispatch({
+          type: 'SIGN_UP_SUCCESS',
+          authUser,
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: 'SIGN_UP_FAILURE',
+          error,
+        })
+      })
+    dispatch(reset('signUp'))
   }
 }

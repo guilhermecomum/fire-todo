@@ -1,13 +1,28 @@
 const initialState = {
-  loading: false,
+  signingUp: false,
+  signUpError: {},
 }
 
 export default (state = initialState, action = {}) => {
   switch (action.type) {
-  case 'REQUEST': {
+  case 'SIGN_UP_REQUEST': {
     return {
       ...state,
-      loading: true,
+      signingUp: true,
+    }
+  }
+  case 'SIGN_UP_SUCCESS': {
+    return {
+      ...state,
+      signingUp: false,
+      currentUser: action.authUser
+    }
+  }
+  case 'SIGN_UP_FAILURE': {
+    return {
+      ...state,
+      signingUp: false,
+      signUpError: {error: true, ...action.error}
     }
   }
   default:
